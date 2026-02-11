@@ -8,31 +8,40 @@ import { useNavigate } from "react-router-dom";
 import ContactCard from "../components/ContactCard";
 import { useState } from "react";
 import ContactInfoModal from "../components/ContactInfoModal";
+import Certifications from "../components/CertificationCard";
+import SectionCard from "../components/SectionCard";
+import ExpandableSection from "../components/ExpandableSection";
 
 function Home() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const { personaldetails } = Contents;
+
   return (
-    <main className="pt-20 max-w-5xl mx-auto space-y-10">
+    <main className="pt-20 max-w-5xl mx-auto space-y-8">
       {/* Profile Card */}
-      <section className="bg-white rounded-lg shadow">
-        <div className="h-40 bg-gradient-to-r from-green-600 to-blue-600 rounded-t-lg"></div>
-        <div className="px-6 -mt-12 items-end gap-6">
+      <section className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="h-40 bg-gradient-to-r from-green-600 to-blue-600"></div>
+
+        <div className="px-6 pb-6 -mt-12">
           <img
             src={personaldetails.avtar}
             alt="profile"
             className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover object-top"
           />
 
-          <div className="profile-card-parent flex">
-            <div className="profile-card-left w-2/3">
+          <div className="flex mt-4 gap-6">
+            {/* Left */}
+            <div className="w-2/3">
               <h1 className="text-2xl font-semibold">{personaldetails.name}</h1>
-              <p className="text-gray-700"> {personaldetails.tagline}</p>
-              <div className="flex gap-1.5 relative">
+
+              <p className="text-gray-700">{personaldetails.tagline}</p>
+
+              <div className="flex gap-2 items-center">
                 <p className="text-sm text-gray-500">
                   {personaldetails.location}
                 </p>
+
                 <button
                   className="text-sm text-blue-500 font-semibold hover:underline"
                   onClick={() => setShowPopup(true)}
@@ -42,78 +51,85 @@ function Home() {
               </div>
             </div>
 
-            <ContactInfoModal
-              isOpen={showPopup}
-              onClose={() => setShowPopup(false)}
-            />
-
-            <div className="profilecard-right w-1/3">
+            {/* Right */}
+            <div className="w-1/3">
               <Institutions />
             </div>
           </div>
-          <div className="pb-2">
+
+          <div className="mt-4">
             <CylindricalButton
               expanded={false}
               onClick={() => navigate("/contact")}
               labelCollapsed="Message"
-              className="text-white bg-blue-500 border hover:bg-blue-600 cursor-pointer"
+              className="text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
             />
           </div>
         </div>
+
+        <ContactInfoModal
+          isOpen={showPopup}
+          onClose={() => setShowPopup(false)}
+        />
       </section>
 
-      {/* About Section */}
-      <div className="bg-white rounded-lg shadow p-6 px-6 py-4">
-        <h2 className="text-lg font-semibold mb-2">About</h2>
-        <p className="text-gray-700">
-          💻 Software Developer who build systems, not just code syntax.
-          <br></br>
+      {/* About */}
+      <SectionCard title="About">
+        <p className="text-gray-700 leading-relaxed">
+          💻 Software Developer who builds systems, not just code syntax.
+          <br />
           Hey, I’m Rohan — a guy who loves building things that work fast and
           work smart. I started with C++ and DSA back in college, and that
           shaped how I think about code — clean logic, optimized structure, no
           fluff. While most people write APIs, I design systems with purpose.
         </p>
-      </div>
+      </SectionCard>
 
-      {/* Activity Section */}
-      <div className="bg-white rounded-lg shadow p-6 px-6 py-4">
-        <h2 className="text-lg font-semibold mb-2">Activity</h2>
+      {/* Activity */}
+      <SectionCard title="Activity">
         <ActivitySection />
-      </div>
+      </SectionCard>
 
-      {/* Experience Section */}
-      <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-lg font-semibold mb-2">Experience</h2>
-        <div className="mt-4 flex flex-col gap-6">
-          {Contents.experience.map((elem, id) => (
-            <ExperienceTab key={id} exp={elem} expand={false} />
-          ))}
-        </div>
-      </section>
+      {/* Experience */}
+      <SectionCard title="Experience">
+        <ExpandableSection
+          items={Contents.experience}
+          initialCount={2}
+          buttonText={`Show all ${Contents.experience.length} experiences`}
+          renderItem={(item, index) => (
+            <ExperienceTab key={index} exp={item} expand={false} />
+          )}
+        />
+      </SectionCard>
 
-      {/* Projects Section */}
-      <section className="bg-white rounded-lg shadow">
-        <div className="projects p-6">
-          <h2 className="text-lg font-semibold mb-2">Projects</h2>
-          <div className="mt-4 flex flex-col gap-1">
-            {Contents.projects.map((proj, i) => (
-              <ProjectCard key={i} project={proj} compact />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Projects */}
+      <SectionCard title="Projects">
+        <ExpandableSection
+          items={Contents.projects}
+          initialCount={3}
+          buttonText={`Show all ${Contents.projects.length} projects`}
+          renderItem={(item, index) => (
+            <ProjectCard key={index} project={item} compact />
+          )}
+        />
+      </SectionCard>
 
-      {/* Blog Section */}
-      {/* <section className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">Blog</h2>
-        <Blog />
-      </section> */}
+      {/* Certifications */}
+      <SectionCard title="Licenses & Certifications">
+        <ExpandableSection
+          items={Contents.certifications}
+          initialCount={2}
+          buttonText={`Show all ${Contents.certifications.length} certifications`}
+          renderItem={(item, index) => (
+            <Certifications key={index} cert={item} />
+          )}
+        />
+      </SectionCard>
 
-      {/* Contact Section */}
-      <section className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">Contact</h2>
+      {/* Contact */}
+      <SectionCard title="Contact">
         <ContactCard page={false} />
-      </section>
+      </SectionCard>
     </main>
   );
 }
