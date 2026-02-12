@@ -1,113 +1,85 @@
-import { NavLink } from "react-router-dom";
-import { Home, Briefcase, Users, Bell } from "lucide-react";
-import { Contents } from "../content";
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Home, Briefcase, Users, Bell, Menu, X } from 'lucide-react';
+import { Contents } from '../content';
 
 function Navbar() {
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const navigate = useNavigate();
-
-  const baseClasses =
-    "flex flex-col items-center text-sm transition-all duration-200";
-  const inactiveClasses = "text-gray-600 hover:text-gray-800 hover:scale-105"; // subtle hover
-  const activeClasses = "text-black font-medium scale-110"; // active route highlight
-
-  // const handleSearchSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (searchQuery.trim()) {
-  //     navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
-  //     setSearchQuery(""); // clear input if desired
-  //   }
-  // };
-
+  const [isOpen, setIsOpen] = useState(false);
   const { personaldetails } = Contents;
 
+  const navItems = [
+    { to: '/', icon: <Home size={22} />, label: 'Home', end: true },
+    { to: '/projects', icon: <Briefcase size={22} />, label: 'Projects' },
+    { to: '/experience', icon: <Users size={22} />, label: 'Experience' },
+    { to: '/contact', icon: <Bell size={22} />, label: 'Contact' },
+  ];
+
   return (
-    <header className="bg-white shadow-sm fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-2">
-        {/* Logo + Search */}
-        <div className="flex items-center gap-4">
-          <div className="bg-blue-600 text-white font-bold text-xl px-2 py-1 rounded">
-            rp
-          </div>
-          {/* <form onSubmit={handleSearchSubmit}>
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-gray-100 rounded-full px-4 py-1 text-sm outline-none w-64"
-            />
-          </form> */}
-        </div>
+    <header className="bg-white border-b border-gray-200 fixed top-0 left-0 w-full z-50">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-2">
+        {/* Logo */}
+        <div className="text-blue-600 font-bold text-2xl cursor-pointer">rp</div>
 
-        {/* Nav */}
-        <nav className="flex items-center gap-8 text-gray-600">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              `${baseClasses} ${
-                isActive ? activeClasses : inactiveClasses
-              } active:scale-95 active:opacity-80`
-            }
-          >
-            <Home size={20} />
-            Home
-          </NavLink>
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-10">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `flex flex-col items-center text-xs transition-all duration-200 relative ${
+                  isActive ? 'text-black font-medium' : 'text-gray-500 hover:text-black'
+                }`
+              }>
+              {({ isActive }) => (
+                <>
+                  {item.icon}
+                  <span className="mt-1">{item.label}</span>
 
-          <NavLink
-            to="/projects"
-            className={({ isActive }) =>
-              `${baseClasses} ${
-                isActive ? activeClasses : inactiveClasses
-              } active:scale-95 active:opacity-80`
-            }
-          >
-            <Briefcase size={20} />
-            Projects
-          </NavLink>
+                  {/* Active underline */}
+                  {isActive && <span className="absolute -bottom-2 w-full h-[2px] bg-black rounded-full"></span>}
+                </>
+              )}
+            </NavLink>
+          ))}
 
-          <NavLink
-            to="/experience"
-            className={({ isActive }) =>
-              `${baseClasses} ${
-                isActive ? activeClasses : inactiveClasses
-              } active:scale-95 active:opacity-80`
-            }
-          >
-            <Users size={20} />
-            Experience
-          </NavLink>
-
-          {/* <NavLink
-            to="/blog"
-            className={({ isActive }) =>
-              `${baseClasses} ${isActive ? activeClasses : inactiveClasses} active:scale-95 active:opacity-80`
-            }
-          >
-            <MessageSquare size={20} />
-            Blog
-          </NavLink> */}
-
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              `${baseClasses} ${
-                isActive ? activeClasses : inactiveClasses
-              } active:scale-95 active:opacity-80`
-            }
-          >
-            <Bell size={20} />
-            Contact
-          </NavLink>
-
+          {/* Profile */}
           <img
             src={personaldetails.avtar}
             alt="profile"
-            className="w-8 h-8 rounded-full border object-cover"
+            className="w-8 h-8 rounded-full object-cover border cursor-pointer"
           />
         </nav>
+
+        {/* Mobile Hamburger */}
+        <button className="md:hidden text-gray-700" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <nav className="flex flex-col items-center gap-6 py-6">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `flex flex-col items-center text-sm ${isActive ? 'text-black font-medium' : 'text-gray-600'}`
+                }>
+                {item.icon}
+                <span className="mt-1">{item.label}</span>
+              </NavLink>
+            ))}
+
+            <img src={personaldetails.avtar} alt="profile" className="w-10 h-10 rounded-full object-cover border" />
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

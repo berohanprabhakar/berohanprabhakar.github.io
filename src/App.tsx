@@ -1,12 +1,12 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Layout from "./Layout";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Layout from './Layout';
 
-import Home from "./pages/Home";
-import Experience from "./pages/Experience";
-import Projects from "./pages/Projects";
-import Blog from "./pages/Blog";
+import Blog from './pages/Blog';
+import Experience from './pages/Experience';
+import Home from './pages/Home';
+import Projects from './pages/Projects';
 // import Contact from "./pages/Contact";
-import ContactCard from "./components/ContactCard";
+import ContactCard from './components/ContactCard';
 
 function App() {
   return (
