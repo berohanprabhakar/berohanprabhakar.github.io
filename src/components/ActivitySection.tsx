@@ -93,7 +93,6 @@ const ActivitySection: React.FC = () => {
           timeago: time_ago(toMillis(item.timestamp)), // ✅ append here
         }));
 
-      console.log(combined);
       setActivities(combined);
       setLoading(false);
     };
