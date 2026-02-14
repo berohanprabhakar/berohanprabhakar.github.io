@@ -68,7 +68,7 @@ export default function ContactInfoModal({ isOpen, onClose }: any) {
                   <span className="text-gray-500"> (Personal)</span>
                 </a>
                 <a
-                  href={`https://${personaldetails.socials.portfolio}`}
+                  href={personaldetails.socials.portfolio}
                   target="_blank"
                   rel="noreferrer"
                   className="text-blue-600 hover:underline block"
