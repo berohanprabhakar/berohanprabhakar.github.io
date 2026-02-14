@@ -5,7 +5,6 @@ export async function fetchLeetCodeActivity(username: string) {
     });
 
     const json = await res.json();
-    console.log(json);
     const submissions = json?.submission?.slice(0, 5).map((s: any) => ({
       icon: "leetcode" as const,
       title: "LeetCode Submission",
